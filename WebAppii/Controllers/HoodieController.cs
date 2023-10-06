@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Web.Http;
 using Npgsql;
-
+using WebAppii.Models;
 namespace WebAppii.Controllers
 {
     public class HoodieController : ApiController

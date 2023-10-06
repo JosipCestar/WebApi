@@ -135,6 +135,8 @@ namespace WebAppii.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+       
+        [Route("api/Hoodies/{hoodieId}/ZippedHoodie")]
         public Hoodie GetHoodieById(Guid hoodieId)
         {
             try
