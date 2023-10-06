@@ -7,10 +7,10 @@ using WebAppii.Models;
 
 namespace WebAppii.Service.Common
 {
-    public interface HoodieServiceCommon
+    public interface HoodieService
     {
-        List<Hoodie>  GetAllHoodies();
-        Hoodie  GetHoodieById(Guid id);
+        List<Hoodie> GetAllHoodies();
+        Hoodie GetHoodieById(Guid id);
         String PostHoodie(Hoodie hoodie);
 
         String DeleteHoodie(Guid id);

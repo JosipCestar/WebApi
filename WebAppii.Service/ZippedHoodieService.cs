@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAppii.Service
 {
-    internal class ZippedHoodieServiceCommon
+    internal class ZippedHoodieService
     {
     }
 }

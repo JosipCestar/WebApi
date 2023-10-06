@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HoodieServiceCommon.cs" />
-    <Compile Include="ZippedHoodieServiceCommon.cs" />
+    <Compile Include="HoodieService.cs" />
+    <Compile Include="ZippedHoodieService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
