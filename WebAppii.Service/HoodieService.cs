@@ -19,7 +19,8 @@ namespace WebAppii.Service
     
     public string DeleteHoodie(Guid id)
     {
-        throw new NotImplementedException();
+            string acc= repository.DeleteHoodie(id);
+        return acc;
     }
 
     public List<Hoodie> GetAllHoodies()

@@ -5,186 +5,85 @@ using System.Net.Http;
 using System.Web.Http;
 using Npgsql;
 using WebAppii.Models; 
-
+using WebAppii.Service.Common;
 namespace WebAppii.Controllers
 {
     public class ZippedHoodieController : ApiController
-    {
-        private NpgsqlConnection connection;
-        private string tableName = "\"ZippedHoodie\"";
-
-        [HttpPost]
-        [Route("api/Hoodies/{hoodieId}/ZippedHoodie")]
-        public HttpResponseMessage AddZippedHoodie(Guid hoodieId, ZippedHoodie zippedHoodie)
+    { 
+        private ZippedHoodieServiceCommon service { get; set; }
+        public ZippedHoodieController(ZippedHoodieServiceCommon service)
         {
-            try
-            {
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
-                string commandText = $"INSERT INTO {tableName} (\"Id\", \"Name\", \"HoodieID\") VALUES (@id, @name, @hoodieId)";
-                using (var cmd = new NpgsqlCommand(commandText, connection))
-                {
-                    Guid id = Guid.NewGuid();
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Parameters.AddWithValue("@name", zippedHoodie.Name);
-                    cmd.Parameters.AddWithValue("@hoodieId", hoodieId);
+            this.service = service;
+        }
 
-                    cmd.ExecuteNonQuery();
-                    return Request.CreateResponse(HttpStatusCode.OK, "ZippedHoodie Created");
-                }
-            }
-            catch (Exception ex)
+        public HttpResponseMessage GetAll() { 
+        
+        List<ZippedHoodie> zippedHoodies = service.GetAll();
+            if (zippedHoodies != null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.OK, zippedHoodies);
+            }
+            else
+            {
+                
+                return Request.CreateResponse(HttpStatusCode.NotFound, "No zipped hoodies found.");
             }
         }
 
-        [HttpGet]
-        [Route("api/Hoodies/{hoodieId}/ZippedHoodie")]
-        public HttpResponseMessage GetZippedHoodies(Guid hoodieId)
+        public HttpResponseMessage Get(Guid id)
         {
-            try
+            ZippedHoodie hoodie = service.GetHoodieById(id);
+            if (hoodie != null)
             {
-                List<ZippedHoodie> zippedHoodies = new List<ZippedHoodie>();
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
-                string commandText = $"SELECT * FROM {tableName} WHERE \"HoodieID\" = @hoodieId";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, connection))
-                {
-                    cmd.Parameters.AddWithValue("@hoodieId", hoodieId);
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            ZippedHoodie zippedHoodie = ReadZippedHoodie(reader);
-                            zippedHoodies.Add(zippedHoodie);
-                        }
-                        return Request.CreateResponse(HttpStatusCode.OK, zippedHoodies);
-                    }
-                }
+                return Request.CreateResponse(HttpStatusCode.OK, hoodie);
             }
-            catch (Exception ex)
+            else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Hoodie not found");
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage Add(ZippedHoodie hoodie)
+        {
+            string acc = service.Post(hoodie);
+            if (acc == "Created")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "Added");
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not added");
             }
         }
 
         [HttpPut]
-        [Route("api/Hoodies/{hoodieId}/ZippedHoodie/{zippedHoodieId}")]
-        public HttpResponseMessage UpdateZippedHoodie(Guid hoodieId, Guid zippedHoodieId, ZippedHoodie zippedHoodie)
+        public HttpResponseMessage Update(ZippedHoodie hoodie)
         {
-            try
+            string acc = service.Update(hoodie);
+            if (acc == "Updated")
             {
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
-                var commandText = $"UPDATE {tableName} SET \"Name\" = @name WHERE \"Id\" = @zippedHoodieId AND \"HoodieID\" = @hoodieId";
-
-                using (var cmd = new NpgsqlCommand(commandText, connection))
-                {
-                    cmd.Parameters.AddWithValue("@zippedHoodieId", zippedHoodieId);
-                    cmd.Parameters.AddWithValue("@hoodieId", hoodieId);
-                    cmd.Parameters.AddWithValue("@name", zippedHoodie.Name);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.OK, "ZippedHoodie Updated");
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "ZippedHoodie not found");
-                    }
-                }
+                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             }
-            catch (Exception ex)
+            else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not updated");
             }
         }
-
         [HttpDelete]
-        [Route("api/Hoodies/{hoodieId}/ZippedHoodie/{zippedHoodieId}")]
-        public HttpResponseMessage DeleteZippedHoodie(Guid hoodieId, Guid zippedHoodieId)
+        public HttpResponseMessage Delete(Guid id)
         {
-            try
+            string acc = service.Delete(id);
+            if (acc == "Deleted")
             {
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
-                string commandText = $"DELETE FROM {tableName} WHERE \"Id\" = @zippedHoodieId AND \"HoodieID\" = @hoodieId";
-                using (var cmd = new NpgsqlCommand(commandText, connection))
-                {
-                    cmd.Parameters.AddWithValue("@zippedHoodieId", zippedHoodieId);
-                    cmd.Parameters.AddWithValue("@hoodieId", hoodieId);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.OK, "ZippedHoodie Deleted");
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "ZippedHoodie not found");
-                    }
-                }
+                return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
             }
-            catch (Exception ex)
+            else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not deleted");
             }
         }
-       
-        [Route("api/Hoodies/{hoodieId}/ZippedHoodie")]
-        public Hoodie GetHoodieById(Guid hoodieId)
-        {
-            try
-            {
-                using (NpgsqlConnection connection = new NpgsqlConnection("\"Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;\""))
-                {
-                    connection.Open();
 
-                    string commandText = "SELECT * FROM \"Hoodie\" WHERE \"Id\" = @id";
 
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@id", hoodieId);
-
-                        using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                Guid id = reader["Id"] != DBNull.Value ? (Guid)reader["Id"] : Guid.Empty;
-                                string name = reader["Name"] != DBNull.Value ? reader["Name"].ToString() : string.Empty;
-                                string size = reader["Size"] != DBNull.Value ? reader["Size"].ToString() : string.Empty;
-                                string style = reader["Style"] != DBNull.Value ? reader["Style"].ToString() : string.Empty;
-
-                                return new Hoodie(id, name, size, style);
-                            }
-                            else
-                            {
-                                return null; 
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving Hoodie by Id: " + ex.Message);
-            }
-        }
-        private ZippedHoodie ReadZippedHoodie(NpgsqlDataReader reader)
-        {
-            Guid id = (Guid)reader["Id"];
-            string name = reader["Name"].ToString();
-            Guid hoodieID= (Guid)reader["HoodieID"];
-
-            Hoodie hoodie = GetHoodieById(hoodieID);
-
-            ZippedHoodie zippedHoodie = new ZippedHoodie(id, name, hoodie); 
-            return zippedHoodie;
-        }
     }
 }

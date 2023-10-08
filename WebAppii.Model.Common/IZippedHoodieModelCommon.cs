@@ -10,8 +10,6 @@ namespace WebAppii.Model.Common
     {
         Guid Id { get; set; }
         string Name { get; set; }
-        
-        
-
+     
     }
 }

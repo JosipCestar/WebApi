@@ -5,15 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAppii.Models;
 
-namespace WebAppii.Service.Common
+namespace WebAppii.Repository.Common
 {
-    public interface ZippedHoodieServiceCommon
+    public interface ZippedHoodieRepositoryCommon
     {
+        string Delete(Guid id);
         List<ZippedHoodie> GetAll();
         ZippedHoodie GetHoodieById(Guid id);
-        String Post(ZippedHoodie hoodie);
-
-        String Delete(Guid id);
-        String Update(ZippedHoodie hoodie);
+        string Post(ZippedHoodie zippedHoodie);
+        string Update(ZippedHoodie zippedHoodie);
     }
 }
