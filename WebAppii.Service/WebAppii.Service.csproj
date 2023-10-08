@@ -46,6 +46,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebAppii.Repository.Common\WebAppii.Repository.Common.csproj">
+      <Project>{5faf69da-86f4-4eb9-8425-63737ca6f6ec}</Project>
+      <Name>WebAppii.Repository.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebAppii.Service.Common\WebAppii.Service.Common.csproj">
+      <Project>{b85bb780-f78f-45b8-9420-e2379a6f051c}</Project>
+      <Name>WebAppii.Service.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WepAppii.Models\WepAppii.Models.csproj">
       <Project>{316c3a54-5456-4233-a55c-34b79e85bd71}</Project>
       <Name>WepAppii.Models</Name>

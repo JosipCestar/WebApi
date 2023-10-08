@@ -21,8 +21,6 @@ namespace WebAppii.Repository
 
         public HoodieRepository()
         {
-
-
         }
         
         public string DeleteHoodie(Guid id)
@@ -78,18 +76,7 @@ namespace WebAppii.Repository
             catch (Exception ex)
             {
                 return null;
-            };
-
-          
-
-           
-         
-            
-
-
-      
-
-
+            }
             
 
 

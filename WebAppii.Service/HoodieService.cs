@@ -4,16 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebAppii.Models;
-
-namespace WebAppii.Service.Common
+using WebAppii.Service.Common;
+using WebAppii.Repository.Common;
+namespace WebAppii.Service
+{ 
+    public class HoodieService : HoodieServiceCommon
 {
-    public interface HoodieService
-    {
-        List<Hoodie> GetAllHoodies();
-        Hoodie GetHoodieById(Guid id);
-        String PostHoodie(Hoodie hoodie);
+     private HoodieRepositoryCommon repository { get; set; }
 
-        String DeleteHoodie(Guid id);
-        String UpdateHoodie(Hoodie hoodie);
+    public HoodieService(HoodieRepositoryCommon repository)
+        {
+            this.repository = repository;
+        }
+    
+    public string DeleteHoodie(Guid id)
+    {
+        throw new NotImplementedException();
     }
+
+    public List<Hoodie> GetAllHoodies()
+    {
+        List<Hoodie> hoodies=repository.GetAllHoodies();
+        return hoodies;
+    }
+
+    public Hoodie GetHoodieById(Guid id)
+    {
+        Hoodie hoodie = repository.GetHoodieById(id);
+        return hoodie;
+    }
+
+    public string PostHoodie(Hoodie hoodie)
+    {
+        string acc= repository.PostHoodie(hoodie);
+        return acc;
+    }
+
+    public string UpdateHoodie(Hoodie hoodie)
+    {
+        string acc= repository.UpdateHoodie(hoodie);
+            return acc;
+    }
+}
 }

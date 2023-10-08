@@ -360,6 +360,10 @@
       <Project>{d5284851-f8a2-448c-8105-979caf2643f6}</Project>
       <Name>WebAppii.Model.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebAppii.Service.Common\WebAppii.Service.Common.csproj">
+      <Project>{b85bb780-f78f-45b8-9420-e2379a6f051c}</Project>
+      <Name>WebAppii.Service.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebAppii.Service\WebAppii.Service.csproj">
       <Project>{c678c054-5e15-4005-ab7d-1481430a84b5}</Project>
       <Name>WebAppii.Service</Name>
