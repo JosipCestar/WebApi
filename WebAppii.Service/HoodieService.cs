@@ -5,45 +5,46 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAppii.Models;
 using WebAppii.Service.Common;
-using WebAppii.Repository.Common;
+using WebAppii.Repository;
+
 namespace WebAppii.Service
 { 
     public class HoodieService : HoodieServiceCommon
 {
-     private HoodieRepositoryCommon repository { get; set; }
+        private HoodieRepository repository;
 
-    public HoodieService(HoodieRepositoryCommon repository)
+    public HoodieService()
         {
-            this.repository = repository;
+            repository = new HoodieRepository ();
         }
     
-    public string DeleteHoodie(Guid id)
+    public async Task<string> DeleteHoodie(Guid id)
     {
-            string acc= repository.DeleteHoodie(id);
+            string acc= await repository.DeleteHoodie(id);
         return acc;
     }
 
-    public List<Hoodie> GetAllHoodies()
+    public async Task<List<Hoodie>> GetAllHoodies()
     {
-        List<Hoodie> hoodies=repository.GetAllHoodies();
+        List<Hoodie> hoodies= await repository.GetAllHoodies();
         return hoodies;
     }
 
-    public Hoodie GetHoodieById(Guid id)
+    public async Task<Hoodie> GetHoodieById(Guid id)
     {
-        Hoodie hoodie = repository.GetHoodieById(id);
+        Hoodie hoodie = await repository.GetHoodieById(id);
         return hoodie;
     }
 
-    public string PostHoodie(Hoodie hoodie)
+    public async Task<string> PostHoodie(Hoodie hoodie)
     {
-        string acc= repository.PostHoodie(hoodie);
+        string acc= await repository.PostHoodie(hoodie);
         return acc;
     }
 
-    public string UpdateHoodie(Hoodie hoodie)
+    public async Task<string> UpdateHoodie(Hoodie hoodie,Guid id)
     {
-        string acc= repository.UpdateHoodie(hoodie);
+        string acc=await repository.UpdateHoodie(hoodie,id);
             return acc;
     }
 }

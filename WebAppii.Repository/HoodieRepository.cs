@@ -1,70 +1,63 @@
-﻿using System;
+﻿using Npgsql;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Runtime.InteropServices;
-
-using Npgsql;
-using WebAppii.Models;
-using WebAppii.Service.Common;
-using WebAppii.Repository.Common;
 using System.Threading.Tasks;
-using System.Security.Cryptography.X509Certificates;
+using System;
+using WebAppii.Models;
+using WebAppii.Repository.Common;
 
-namespace WebAppii.Repository
-
+public class HoodieRepository : HoodieRepositoryCommon
 {
-    public class HoodieRepository : HoodieRepositoryCommon
+    private NpgsqlConnection connection;
+    private string tableName = "\"Hoodie\"";
+
+    public HoodieRepository()
     {
-        private NpgsqlConnection connection;
-        private string tableName = "\"Hoodie\"";
+    }
 
-        public HoodieRepository()
+    public async Task<string> DeleteHoodie(Guid id)
+    {
+        try
         {
-        }
-        
-        public string DeleteHoodie(Guid id)
-        {
-            try
+            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
-
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
-                string commandText = $"DELETE FROM {tableName} WHERE id = @id";
+                await connection.OpenAsync();
+                string commandText = $"DELETE FROM {tableName} WHERE \"Id\" = @id";
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
 
                     if (rowsAffected > 0)
                     {
-                        return ("Deleted");
+                        return "Deleted";
                     }
                     else
                     {
-                        return ("Hoodie not found");
+                        return "Hoodie not found";
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                return ("Error");
-            }
         }
+        catch (Exception ex)
+        {
+            return "Error";
+        }
+    }
 
-        public List<Hoodie> GetAllHoodies() {
-            try
+    public async Task<List<Hoodie>> GetAllHoodies()
+    {
+        try
+        {
+            List<Hoodie> hoodies = new List<Hoodie>();
+            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
-                List<Hoodie> hoodies = new List<Hoodie>();
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
+                await connection.OpenAsync();
                 string commandText = $"SELECT * FROM {tableName}";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, connection))
+                using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             Hoodie hoodie = ReadHoodie(reader);
                             hoodies.Add(hoodie);
@@ -73,39 +66,28 @@ namespace WebAppii.Repository
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            
-
-
         }
-        Hoodie ReadHoodie(NpgsqlDataReader reader)
+        catch (Exception ex)
         {
-            Guid? id = reader["id"] as Guid?;
-            string name = reader["name"].ToString();
-            string size = reader["size"].ToString();
-            string style = reader["style"].ToString();
-
-
-            Hoodie hoodie = new Hoodie(id.Value, name, size, style);
-            return hoodie;
+            return null;
         }
-        public Hoodie GetHoodieById(Guid id)
+    }
+
+    public async Task<Hoodie> GetHoodieById(Guid id)
+    {
+        try
         {
-            try
+            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
+                await connection.OpenAsync();
                 string commandText = $"SELECT * FROM {tableName} WHERE \"Id\" = @id";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, connection))
+                using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
 
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             Hoodie hoodie = ReadHoodie(reader);
                             return hoodie;
@@ -114,18 +96,20 @@ namespace WebAppii.Repository
                 }
                 return null;
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
         }
-
-        public string PostHoodie(Hoodie hoodie)
+        catch (Exception ex)
         {
-            try
+            return null;
+        }
+    }
+
+    public async Task<string> PostHoodie(Hoodie hoodie)
+    {
+        try
+        {
+            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
+                await connection.OpenAsync();
                 string commandText = $"INSERT INTO {tableName} (\"Id\",\"Name\", \"Size\", \"Style\") VALUES (@id,@name, @size, @style)";
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
@@ -135,43 +119,52 @@ namespace WebAppii.Repository
                     cmd.Parameters.AddWithValue("@size", hoodie.Size);
                     cmd.Parameters.AddWithValue("@style", hoodie.Style);
 
-                    cmd.ExecuteNonQuery();
-                    return ("Created");
+                    await cmd.ExecuteNonQueryAsync();
+                    return "Created";
                 }
             }
-            catch (Exception ex)
-            {
-                return ("Error");
-            }
         }
-
-        public string UpdateHoodie(Hoodie hoodie)
+        catch (Exception ex)
         {
-            try
+            return "Error";
+        }
+    }
+
+    public async Task<string> UpdateHoodie(Hoodie hoodie, Guid id)
+    {
+        try
+        {
+            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
-
-
-
-                connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;");
-                connection.Open();
+                await connection.OpenAsync();
                 var commandText = $"UPDATE {tableName} SET \"Name\" = @name, \"Size\" = @size, \"Style\" = @style WHERE \"id\" = @id";
 
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
-                    cmd.Parameters.AddWithValue("@id", hoodie.Id);
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@name", hoodie.Name);
                     cmd.Parameters.AddWithValue("@size", hoodie.Size);
                     cmd.Parameters.AddWithValue("@style", hoodie.Style);
 
-                    cmd.ExecuteNonQuery();
-                    return ("Updated");
+                    await cmd.ExecuteNonQueryAsync();
+                    return "Updated";
                 }
             }
-            catch (Exception ex)
-            {
-                return ("Error");
-            }
-
         }
+        catch (Exception ex)
+        {
+            return "Error";
+        }
+    }
+
+    Hoodie ReadHoodie(NpgsqlDataReader reader)
+    {
+        Guid? id = reader["id"] as Guid?;
+        string name = reader["name"].ToString();
+        string size = reader["size"].ToString();
+        string style = reader["style"].ToString();
+
+        Hoodie hoodie = new Hoodie(id.Value, name, size, style);
+        return hoodie;
     }
 }

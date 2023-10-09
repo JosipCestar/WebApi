@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Npgsql;
 using WebAppii.Models;
-using WebAppii.Service.Common;
+using WebAppii.Service;
 namespace WebAppii.Controllers
 {
     public class HoodieController : ApiController
@@ -14,17 +15,17 @@ namespace WebAppii.Controllers
         private NpgsqlConnection connection;
         private string tableName = "\"Hoodie\"";
 
-        private HoodieServiceCommon service { get; set; }
+        private HoodieService service;
 
-        public HoodieController(HoodieServiceCommon service)
+        public HoodieController()
         {
-            this.service = service;
+            service = new HoodieService();
         }
 
         [HttpPost]
-        public HttpResponseMessage Add(Hoodie hoodie)
+        public async Task<HttpResponseMessage>  Add(Hoodie hoodie)
         {
-            string acc = service.PostHoodie(hoodie);
+            string acc = await service.PostHoodie(hoodie);
             if (acc == "Created")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Added");
@@ -36,9 +37,9 @@ namespace WebAppii.Controllers
         }
         [HttpGet]
 
-        public HttpResponseMessage Get(Guid id)
+        public async Task<HttpResponseMessage> Get(Guid id)
         {
-            Hoodie hoodie = service.GetHoodieById(id);
+            Hoodie hoodie =await service.GetHoodieById(id);
             if (hoodie != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodie);
@@ -52,9 +53,9 @@ namespace WebAppii.Controllers
 
         [HttpGet]
 
-        public HttpResponseMessage GetAll() { 
+        public async Task<HttpResponseMessage> GetAll() { 
          
-            List<Hoodie> hoodies = service.GetAllHoodies();
+            List<Hoodie> hoodies = await service.GetAllHoodies();
             if (hoodies != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodies);
@@ -68,7 +69,7 @@ namespace WebAppii.Controllers
 
         
         [HttpPut]
-        public HttpResponseMessage Update(Guid id, Hoodie hoodie)
+        public async Task<HttpResponseMessage> Update(Guid id, Hoodie hoodie)
             
         {
             if (hoodie==null)
@@ -77,7 +78,7 @@ namespace WebAppii.Controllers
             }
             else
             {
-                string acc = service.UpdateHoodie(hoodie);
+                string acc = await service.UpdateHoodie(hoodie, id);
                 if (acc == "Updated")
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "Updated");
@@ -90,12 +91,20 @@ namespace WebAppii.Controllers
         }
 
         [HttpDelete]
-        public HttpResponseMessage Delete(Guid id)
+        public async Task<HttpResponseMessage> Delete(Guid id)
         {
-            string acc = service.DeleteHoodie(id);
+            string acc = await service.DeleteHoodie(id);
             if (acc == "Deleted")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
+            }
+            else if (acc == "Hoodie not found")
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Hoodie not found");
+            }
+            else if (acc == "Error")
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Error");
             }
             else
             {

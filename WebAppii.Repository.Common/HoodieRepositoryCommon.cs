@@ -9,11 +9,11 @@ namespace WebAppii.Repository.Common
 {
     public interface HoodieRepositoryCommon
     {
-        List<Hoodie> GetAllHoodies();
-        Hoodie GetHoodieById(Guid id);
-        String PostHoodie(Hoodie hoodie);
-        String DeleteHoodie(Guid id);
+        Task<List<Hoodie>> GetAllHoodies();
+        Task<Hoodie> GetHoodieById(Guid id);
+        Task<String> PostHoodie(Hoodie hoodie);
+        Task<String> DeleteHoodie(Guid id);
 
-        String UpdateHoodie(Hoodie hoodie);
+        Task<String> UpdateHoodie(Hoodie hoodie,Guid id);
     }
 }
