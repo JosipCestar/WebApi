@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="AttributeRoutingConfig.cs" />
     <Compile Include="BaseConnection.cs" />
+    <Compile Include="ZippedHoodieRepository.cs" />
     <Compile Include="HoodieRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
