@@ -25,8 +25,8 @@ public class HoodieRepository : HoodieRepositoryCommon
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
+                   
                     int rowsAffected = await cmd.ExecuteNonQueryAsync();
-
                     if (rowsAffected > 0)
                     {
                         return "Deleted";
@@ -159,10 +159,10 @@ public class HoodieRepository : HoodieRepositoryCommon
 
     Hoodie ReadHoodie(NpgsqlDataReader reader)
     {
-        Guid? id = reader["id"] as Guid?;
-        string name = reader["name"].ToString();
-        string size = reader["size"].ToString();
-        string style = reader["style"].ToString();
+        Guid? id = reader["Id"] as Guid?;
+        string name = reader["Name"].ToString();
+        string size = reader["Size"].ToString();
+        string style = reader["Style"].ToString();
 
         Hoodie hoodie = new Hoodie(id.Value, name, size, style);
         return hoodie;

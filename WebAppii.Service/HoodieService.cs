@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAppii.Models;
 using WebAppii.Service.Common;
-using WebAppii.Repository;
+using WebAppii.Repository.Common;
 
 namespace WebAppii.Service
 { 
     public class HoodieService : HoodieServiceCommon
 {
-        private HoodieRepository repository;
+        private HoodieRepositoryCommon repository;
 
-    public HoodieService()
+
+    public HoodieService(HoodieRepositoryCommon _repository)
         {
-            repository = new HoodieRepository ();
+            repository = _repository;
         }
     
     public async Task<string> DeleteHoodie(Guid id)

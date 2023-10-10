@@ -8,6 +8,7 @@ using System.Web.Http;
 using Npgsql;
 using WebAppii.Models;
 using WebAppii.Service;
+using WebAppii.Service.Common;
 namespace WebAppii.Controllers
 {
     public class HoodieController : ApiController
@@ -15,13 +16,13 @@ namespace WebAppii.Controllers
         private NpgsqlConnection connection;
         private string tableName = "\"Hoodie\"";
 
-        private HoodieService service;
+        private HoodieServiceCommon  service;
 
-        public HoodieController()
+        public HoodieController(HoodieServiceCommon _service)
         {
-            service = new HoodieService();
+            service = _service;
         }
-
+        
         [HttpPost]
         public async Task<HttpResponseMessage>  Add(Hoodie hoodie)
         {

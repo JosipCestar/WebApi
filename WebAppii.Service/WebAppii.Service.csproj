@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=7.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.7.1.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -94,6 +97,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebAppii.Repository.Common\WebAppii.Repository.Common.csproj">
+      <Project>{5faf69da-86f4-4eb9-8425-63737ca6f6ec}</Project>
+      <Name>WebAppii.Repository.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebAppii.Repository\WebAppii.Repository.csproj">
       <Project>{9c7e7081-f4de-4bc0-8cec-40859e8f0b2e}</Project>
       <Name>WebAppii.Repository</Name>
