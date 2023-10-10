@@ -137,16 +137,15 @@ public class HoodieRepository : HoodieRepositoryCommon
             using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
                 await connection.OpenAsync();
-                var commandText = $"UPDATE {tableName} SET \"Name\" = @name, \"Size\" = @size, \"Style\" = @style WHERE \"id\" = @id";
-
+                var commandText = $"UPDATE {tableName} SET \"Name\" = @name, \"Size\" = @size, \"Style\" = @style WHERE \"Id\" = @id";
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@id", hoodie.Id);
                     cmd.Parameters.AddWithValue("@name", hoodie.Name);
                     cmd.Parameters.AddWithValue("@size", hoodie.Size);
                     cmd.Parameters.AddWithValue("@style", hoodie.Style);
 
-                    await cmd.ExecuteNonQueryAsync();
+                    cmd.ExecuteNonQuery();
                     return "Updated";
                 }
             }
