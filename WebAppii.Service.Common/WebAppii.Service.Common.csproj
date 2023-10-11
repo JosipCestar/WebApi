@@ -97,6 +97,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebApiPractice.Common\WebApiPractice.Common.csproj">
+      <Project>{944a0076-7cad-43d5-b80b-d40d13da75cf}</Project>
+      <Name>WebApiPractice.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WepAppii.Models\WepAppii.Models.csproj">
       <Project>{316c3a54-5456-4233-a55c-34b79e85bd71}</Project>
       <Name>WepAppii.Models</Name>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebAppii.Models;
 using WebAppii.Service.Common;
 using WebAppii.Repository.Common;
+using WebApiPractice.Common;
 
 namespace WebAppii.Service
 { 
@@ -25,17 +26,16 @@ namespace WebAppii.Service
         return acc;
     }
 
-    public async Task<List<Hoodie>> GetAll()
-    {
-        List<Hoodie> hoodies= await repository.GetAllHoodies();
-        return hoodies;
-    }
-
-    public async Task<Hoodie> GetHoodieById(Guid id)
-    {
-        Hoodie hoodie = await repository.GetHoodieById(id);
-        return hoodie;
-    }
+    public async Task<List<Hoodie>> GetAll(Paging paging, Sorting sorting, Filtering filtering)
+        {
+            List<Hoodie> hoodies= await repository.GetAllHoodies(paging,sorting,filtering);
+            return hoodies;
+        }
+        public async Task<Hoodie> GetHoodieById(Guid id)
+        {
+            Hoodie hoodie = await repository.GetHoodieById(id);
+            return hoodie;
+        }
 
     public async Task<string> Post(Hoodie hoodie)
     {

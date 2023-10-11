@@ -9,6 +9,7 @@ using Npgsql;
 using WebAppii.Models;
 using WebAppii.Service;
 using WebAppii.Service.Common;
+using WebApiPractice.Common;
 namespace WebAppii.Controllers
 {
     public class HoodieController : ApiController
@@ -54,9 +55,12 @@ namespace WebAppii.Controllers
 
         [HttpGet]
 
-        public async Task<HttpResponseMessage> GetAll() { 
+        public async Task<HttpResponseMessage> GetAll(string querryName,int pageSize,int pageNumber,string sortBy,string sortOrder,string sortSize,string sortStye) { 
          
-            List<Hoodie> hoodies = await service.GetAll();
+            Paging paging = new Paging(pageSize,pageNumber);
+            Sorting sorting = new Sorting(sortBy,sortOrder);
+            Filtering filtering = new Filtering(sortSize,sortStye);
+            List<Hoodie> hoodies = await service.GetAll(paging,sorting,filtering);
             if (hoodies != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodies);

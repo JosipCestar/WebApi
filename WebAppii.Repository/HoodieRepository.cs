@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using WebAppii.Models;
 using WebAppii.Repository.Common;
+using WebApiPractice.Common;
 
 public class HoodieRepository : IHoodieRepository
 {
@@ -44,7 +45,7 @@ public class HoodieRepository : IHoodieRepository
         }
     }
 
-    public async Task<List<Hoodie>> GetAllHoodies()
+    public async Task<List<Hoodie>> GetAllHoodies(Paging paging, Sorting sorting, Filtering filtering)
     {
         try
         {
