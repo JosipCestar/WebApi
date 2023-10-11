@@ -14,10 +14,8 @@ namespace WebAppii.Controllers
 {
     public class HoodieController : ApiController
     {
-        private NpgsqlConnection connection;
-        private string tableName = "\"Hoodie\"";
 
-        private IHoodieService  service;
+        private IHoodieService service;
 
         public HoodieController(IHoodieService _service)
         {
@@ -32,10 +30,10 @@ namespace WebAppii.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Added");
             }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not added");
-            }
+            
+           
+            return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not added");
+           
         }
         [HttpGet]
 
@@ -46,10 +44,10 @@ namespace WebAppii.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodie);
             }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Hoodie not found");
-            }
+            
+           
+            return Request.CreateResponse(HttpStatusCode.NotFound, "Hoodie not found");
+           
         }
 
 
@@ -65,10 +63,10 @@ namespace WebAppii.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodies);
             }
-            else
-            {
+           
+            
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Hoodies not found");
-            }
+            
         }
 
 
@@ -77,21 +75,15 @@ namespace WebAppii.Controllers
         public async Task<HttpResponseMessage> Update(Guid id, Hoodie hoodie)
             
         {
-            if (hoodie==null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
-            }
-            else
-            {
-                string acc = await service.Update(hoodie, id);
-                if (acc == "Updated")
-                {
+           
+           string acc = await service.Update(hoodie, id);
+           if (acc == "Updated")
+           {
                     return Request.CreateResponse(HttpStatusCode.OK, "Updated");
                 }
-                else
-                {
+                
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, "Not updated");
-                }
+                
             }
         }
 

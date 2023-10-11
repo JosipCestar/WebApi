@@ -7,7 +7,7 @@ namespace Repository
 {
     public class BaseConnection : IBaseConnection
     {
-        public NpgsqlConnection connection;
+        public NpgsqlConnection connectionString;
         private const string CONNECTION_STRING = "Host=localhost;" +
            "Port=5432;" +
            "Username=postgres;" +
@@ -15,15 +15,15 @@ namespace Repository
            "Database=";
         public BaseConnection()
         {
-            connection = new NpgsqlConnection(CONNECTION_STRING);
+            connectionString = new NpgsqlConnection(CONNECTION_STRING);
         }
         public void OpenConnection()
         {
-            connection.OpenAsync();
+            connectionString.OpenAsync();
         }
         public void CloseConnection()
         {
-            connection.CloseAsync();
+            connectionString.CloseAsync();
            
         }
     }

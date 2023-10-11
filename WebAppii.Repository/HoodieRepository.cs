@@ -8,21 +8,24 @@ using WebApiPractice.Common;
 using System.Text;
 using System.ComponentModel;
 using System.Web.Http.ModelBinding;
+using Repository;
 
 public class HoodieRepository : IHoodieRepository
 {
-    private NpgsqlConnection connection;
+    private NpgsqlConnection ConnectionString;
+    
     private string tableName = "\"Hoodie\"";
 
     public HoodieRepository()
     {
+        ConnectionString = new BaseConnection().connectionString;
     }
 
     public async Task<string> DeleteHoodie(Guid id)
     {
         try
         {
-            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
+            using (var connection = new NpgsqlConnection(ConnectionString.ConnectionString))
             {
                 await connection.OpenAsync();
                 string commandText = $"DELETE FROM {tableName} WHERE \"Id\" = @id";
@@ -55,7 +58,7 @@ public class HoodieRepository : IHoodieRepository
             StringBuilder querryBuilder = new StringBuilder();
             List<Hoodie> hoodies = new List<Hoodie>();
 
-            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
+            using (var connection = new NpgsqlConnection(ConnectionString.ConnectionString))
             {
 
                 await connection.OpenAsync();
@@ -88,7 +91,23 @@ public class HoodieRepository : IHoodieRepository
                     int offset= (paging.PageNumber - 1) * paging.PageSize;
 
                     if(paging.PageNumber!=0 && paging.PageSize!=0)
-                    {
+                    {   
+                        if (sorting.SortBy != null)
+                        {
+                            querryBuilder.Append($" ORDER BY \"{sorting.SortBy}\" {sorting.SortOrder} ");
+                        }
+                        else
+                        {
+                            if (sorting.SortOrder != null)
+                            {
+                                querryBuilder.Append($" ORDER BY \"Id\" {sorting.SortOrder} ");
+                            }
+                            else
+                            {
+                                querryBuilder.Append(" ORDER BY \"Id\" ASC ");
+                            }   
+                           
+                        }
                         querryBuilder.Append(" ORDER BY \"Id\" ASC ");
                         querryBuilder.Append($" OFFSET {offset} ROWS FETCH NEXT {paging.PageSize} ROWS ONLY ");
                     }
@@ -123,7 +142,7 @@ public class HoodieRepository : IHoodieRepository
     {
         try
         {
-            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
+            using (var connection = new NpgsqlConnection(ConnectionString.ConnectionString))
             {
                 await connection.OpenAsync();
                 string commandText = $"SELECT * FROM {tableName} WHERE \"Id\" = @id";
@@ -153,7 +172,7 @@ public class HoodieRepository : IHoodieRepository
     {
         try
         {
-            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
+            using (var connection = new NpgsqlConnection(ConnectionString.ConnectionString))
             {
                 await connection.OpenAsync();
                 string commandText = $"INSERT INTO {tableName} (\"Id\",\"Name\", \"Size\", \"Style\") VALUES (@id,@name, @size, @style)";
@@ -180,7 +199,7 @@ public class HoodieRepository : IHoodieRepository
     {
         try
         {
-            using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
+            using (var connection = new NpgsqlConnection(ConnectionString.ConnectionString))
             {
                 await connection.OpenAsync();
                 var commandText = $"UPDATE {tableName} SET \"Name\" = @name, \"Size\" = @size, \"Style\" = @style WHERE \"Id\" = @id";
