@@ -5,6 +5,9 @@ using System;
 using WebAppii.Models;
 using WebAppii.Repository.Common;
 using WebApiPractice.Common;
+using System.Text;
+using System.ComponentModel;
+using System.Web.Http.ModelBinding;
 
 public class HoodieRepository : IHoodieRepository
 {
@@ -49,23 +52,65 @@ public class HoodieRepository : IHoodieRepository
     {
         try
         {
+            StringBuilder querryBuilder = new StringBuilder();
             List<Hoodie> hoodies = new List<Hoodie>();
+
             using (var connection = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=neznam555;Database=postgres;"))
             {
+
                 await connection.OpenAsync();
-                string commandText = $"SELECT * FROM {tableName}";
-                using (var cmd = new NpgsqlCommand(commandText, connection))
+                querryBuilder.Append($"SELECT * FROM {tableName} ");
+                NpgsqlCommand cmd = new NpgsqlCommand(querryBuilder.ToString(),connection);
+                if (filtering != null)
                 {
-                    using (var reader = await cmd.ExecuteReaderAsync())
+                    querryBuilder.Append("WHERE ");
+                    if (filtering.QuerryName != null)
                     {
-                        while (await reader.ReadAsync())
-                        {
-                            Hoodie hoodie = ReadHoodie(reader);
-                            hoodies.Add(hoodie);
-                        }
-                        return hoodies;
+                        querryBuilder.Append($"\"Name\" LIKE '%{filtering.QuerryName}%' ");
                     }
+                    if (filtering.QuerrySize != null)
+                    {
+                        if (filtering.QuerryName != null)
+                        {
+                            querryBuilder.Append("AND ");
+                        }
+                        querryBuilder.Append($"\"Size\" LIKE '%{filtering.QuerrySize}%' ");
+                    }
+                    if (filtering.QuerryStyle != null)
+                    {
+                        if (filtering.QuerryName != null || filtering.QuerrySize != null)
+                        {
+                            querryBuilder.Append("AND ");
+                        }
+                        querryBuilder.Append($"\"Style\" LIKE '%{filtering.QuerryStyle}%' ");
+                    }
+
+                    int offset= (paging.PageNumber - 1) * paging.PageSize;
+
+                    if(paging.PageNumber!=0 && paging.PageSize!=0)
+                    {
+                        querryBuilder.Append(" ORDER BY \"Id\" ASC ");
+                        querryBuilder.Append($" OFFSET {offset} ROWS FETCH NEXT {paging.PageSize} ROWS ONLY ");
+                    }
+
+                    using (cmd)
+                    {
+                        cmd.CommandText = querryBuilder.ToString();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                                Hoodie hoodie = ReadHoodie(reader);
+                                hoodies.Add(hoodie);
+                            }
+                        }
+                        connection.Close();
+                    }
+
                 }
+                return hoodies;
+
             }
         }
         catch (Exception ex)

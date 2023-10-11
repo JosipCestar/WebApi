@@ -59,7 +59,7 @@ namespace WebAppii.Controllers
          
             Paging paging = new Paging(pageSize,pageNumber);
             Sorting sorting = new Sorting(sortBy,sortOrder);
-            Filtering filtering = new Filtering(sortSize,sortStye);
+            Filtering filtering = new Filtering(querryName,sortSize,sortStye);
             List<Hoodie> hoodies = await service.GetAll(paging,sorting,filtering);
             if (hoodies != null)
             {
