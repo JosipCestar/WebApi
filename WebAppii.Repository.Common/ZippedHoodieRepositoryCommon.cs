@@ -7,7 +7,7 @@ using WebAppii.Models;
 
 namespace WebAppii.Repository.Common
 {
-    public interface ZippedHoodieRepositoryCommon
+    public interface IZippedHoodieRepository
     {
         Task<List<ZippedHoodie>> GetAllHoodies();
         Task<ZippedHoodie> GetHoodieById(Guid id);

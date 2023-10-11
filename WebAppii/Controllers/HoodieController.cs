@@ -16,9 +16,9 @@ namespace WebAppii.Controllers
         private NpgsqlConnection connection;
         private string tableName = "\"Hoodie\"";
 
-        private HoodieServiceCommon  service;
+        private IHoodieService  service;
 
-        public HoodieController(HoodieServiceCommon _service)
+        public HoodieController(IHoodieService _service)
         {
             service = _service;
         }
@@ -26,7 +26,7 @@ namespace WebAppii.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage>  Add(Hoodie hoodie)
         {
-            string acc = await service.PostHoodie(hoodie);
+            string acc = await service.Post(hoodie);
             if (acc == "Created")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Added");
@@ -56,7 +56,7 @@ namespace WebAppii.Controllers
 
         public async Task<HttpResponseMessage> GetAll() { 
          
-            List<Hoodie> hoodies = await service.GetAllHoodies();
+            List<Hoodie> hoodies = await service.GetAll();
             if (hoodies != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, hoodies);
@@ -79,7 +79,7 @@ namespace WebAppii.Controllers
             }
             else
             {
-                string acc = await service.UpdateHoodie(hoodie, id);
+                string acc = await service.Update(hoodie, id);
                 if (acc == "Updated")
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "Updated");
@@ -94,7 +94,7 @@ namespace WebAppii.Controllers
         [HttpDelete]
         public async Task<HttpResponseMessage> Delete(Guid id)
         {
-            string acc = await service.DeleteHoodie(id);
+            string acc = await service.Delete(id);
             if (acc == "Deleted")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Deleted");

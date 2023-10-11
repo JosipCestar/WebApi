@@ -10,13 +10,13 @@ namespace WebAppii.Controllers
 {
     public class ZippedHoodieController : ApiController
     { 
-        private ZippedHoodieServiceCommon service { get; set; }
-        public ZippedHoodieController(ZippedHoodieServiceCommon service)
+        private IZippedHoodieService service { get; set; }
+        public ZippedHoodieController(IZippedHoodieService service)
         {
             this.service = service;
         }
 
-        public HttpResponseMessage GetAll() { 
+        public HttpResponseMessage GetAll(string query,int pageSize,int pageNumber,string sortBY,string size) { 
         
         List<ZippedHoodie> zippedHoodies = service.GetAll();
             if (zippedHoodies != null)

@@ -5,7 +5,7 @@ using System;
 using WebAppii.Models;
 using WebAppii.Repository.Common;
 
-public class HoodieRepository : HoodieRepositoryCommon
+public class HoodieRepository : IHoodieRepository
 {
     private NpgsqlConnection connection;
     private string tableName = "\"Hoodie\"";

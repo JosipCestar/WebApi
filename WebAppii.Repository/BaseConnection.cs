@@ -1,10 +1,11 @@
 ﻿using Npgsql;
+using System.Management.Instrumentation;
 using System.Threading.Tasks;
 using WebAppii.Repository.Common;
 
 namespace Repository
 {
-    public class BaseConnection : BaseConnectionCommon
+    public class BaseConnection : IBaseConnection
     {
         public NpgsqlConnection connection;
         private const string CONNECTION_STRING = "Host=localhost;" +

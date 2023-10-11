@@ -9,7 +9,7 @@ namespace WebAppii.Models
 {
 
 
-    public class Hoodie:IHoodieModelCommon
+    public class Hoodie:IHoodieModel
     {
 
         public Guid Id { get; set; }

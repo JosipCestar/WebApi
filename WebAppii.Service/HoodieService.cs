@@ -9,23 +9,23 @@ using WebAppii.Repository.Common;
 
 namespace WebAppii.Service
 { 
-    public class HoodieService : HoodieServiceCommon
+    public class HoodieService : IHoodieService
 {
-        private HoodieRepositoryCommon repository;
+        private IHoodieRepository repository;
 
 
-    public HoodieService(HoodieRepositoryCommon _repository)
+    public HoodieService(IHoodieRepository _repository)
         {
             repository = _repository;
         }
     
-    public async Task<string> DeleteHoodie(Guid id)
+    public async Task<string> Delete(Guid id)
     {
             string acc= await repository.DeleteHoodie(id);
         return acc;
     }
 
-    public async Task<List<Hoodie>> GetAllHoodies()
+    public async Task<List<Hoodie>> GetAll()
     {
         List<Hoodie> hoodies= await repository.GetAllHoodies();
         return hoodies;
@@ -37,13 +37,13 @@ namespace WebAppii.Service
         return hoodie;
     }
 
-    public async Task<string> PostHoodie(Hoodie hoodie)
+    public async Task<string> Post(Hoodie hoodie)
     {
         string acc= await repository.PostHoodie(hoodie);
         return acc;
     }
 
-    public async Task<string> UpdateHoodie(Hoodie hoodie,Guid id)
+    public async Task<string> Update(Hoodie hoodie,Guid id)
     {
         string acc=await repository.UpdateHoodie(hoodie,id);
             return acc;

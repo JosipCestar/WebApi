@@ -8,7 +8,7 @@ using WebAppii.Model.Common;
 
 namespace WebAppii.Models
 {
-    public class ZippedHoodie:IZippedHoddieModelCommon
+    public class ZippedHoodie:IZippedHoddieModel
     {
         public Guid Id { get; set; }
         

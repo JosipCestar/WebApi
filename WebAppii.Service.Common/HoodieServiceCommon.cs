@@ -7,13 +7,13 @@ using WebAppii.Models;
 
 namespace WebAppii.Service.Common
 {
-    public interface HoodieServiceCommon
+    public interface IHoodieService
     {
-        Task<List<Hoodie>>  GetAllHoodies();
-        Task<Hoodie>  GetHoodieById(Guid id);
-        Task<String> PostHoodie(Hoodie hoodie);
+        Task<List<Hoodie>> GetAll();
+        Task<Hoodie>GetHoodieById(Guid id);
+        Task<String> Post(Hoodie hoodie);
 
-        Task<String> DeleteHoodie(Guid id);
-        Task<String> UpdateHoodie(Hoodie hoodie, Guid id);
+        Task<String> Delete(Guid id);
+        Task<String> Update(Hoodie hoodie,Guid id);
     }
 }

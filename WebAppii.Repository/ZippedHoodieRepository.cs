@@ -8,7 +8,7 @@ using WebAppii.Repository.Common;
 
 namespace WebAppii.Repository
 {
-    internal class ZippedHoodieRepository : ZippedHoodieRepositoryCommon
+    internal class ZippedHoodieRepository : IZippedHoodieRepository
     {
         public Task<string> DeleteHoodie(Guid id)
         {

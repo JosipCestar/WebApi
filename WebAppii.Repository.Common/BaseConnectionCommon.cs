@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAppii.Repository.Common
 {
-    public interface BaseConnectionCommon
+    public interface IBaseConnection
     {
         void OpenConnection();
         void CloseConnection();

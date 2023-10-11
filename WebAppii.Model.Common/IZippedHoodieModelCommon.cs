@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WebAppii.Model;
 namespace WebAppii.Model.Common
 {
-    public interface IZippedHoddieModelCommon
+    public interface IZippedHoddieModel
     {
         Guid Id { get; set; }
         string Name { get; set; }

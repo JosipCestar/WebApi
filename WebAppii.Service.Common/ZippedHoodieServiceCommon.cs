@@ -7,7 +7,7 @@ using WebAppii.Models;
 
 namespace WebAppii.Service.Common
 {
-    public interface ZippedHoodieServiceCommon
+    public interface IZippedHoodieService
     {
         List<ZippedHoodie> GetAll();
         ZippedHoodie GetHoodieById(Guid id);

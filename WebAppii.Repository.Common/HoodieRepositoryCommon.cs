@@ -7,8 +7,8 @@ using WebAppii.Models;
 
 namespace WebAppii.Repository.Common
 {
-    public interface HoodieRepositoryCommon
-    {
+    public interface IHoodieRepository
+   {
         Task<List<Hoodie>> GetAllHoodies();
         Task<Hoodie> GetHoodieById(Guid id);
         Task<String> PostHoodie(Hoodie hoodie);

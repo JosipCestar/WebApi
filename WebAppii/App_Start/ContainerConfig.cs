@@ -18,8 +18,8 @@ namespace WebAppii.App_Start
         {
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            builder.RegisterType<HoodieService>().As<HoodieServiceCommon>();
-            builder.RegisterType<HoodieRepository>().As<HoodieRepositoryCommon>();
+            builder.RegisterType<HoodieService>().As<IHoodieService>();
+            builder.RegisterType<HoodieRepository>().As<IHoodieRepository>();
             return builder.Build();
         }
     }
